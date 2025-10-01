@@ -108,117 +108,97 @@ The application will be available at:
 - `POST /api/auth/login` - User login
 - `POST /api/auth/register` - User registration
 
-## 🚀 Production Deployment (Vercel + Supabase)
+## 🚀 Production Deployment (Railway)
 
-### Step 1: Set Up Supabase Database
+### Step 1: Deploy to Railway
 
-1. **Create Supabase Account**
-   - Go to https://supabase.com
-   - Sign up for free account
-   - Create new project
-
-2. **Get Database Credentials**
-   - Go to Settings → Database
-   - Copy connection details:
-     - Host
-     - Port (5432)
-     - Database name (postgres)
-     - Username (postgres)
-     - Password
-
-3. **Set Up Database Tables**
-   - Go to SQL Editor in Supabase
-   - Run the initialization script from `server/scripts/init-db.sql`
-
-### Step 2: Deploy to Vercel
-
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Prepare for Vercel deployment"
-   git push origin main
-   ```
-
-2. **Connect to Vercel**
-   - Go to https://vercel.com
+1. **Create Railway Account**
+   - Go to https://railway.app
    - Sign up with GitHub
-   - Import your repository
-   - Set build settings:
-     - **Framework Preset**: Other
-     - **Root Directory**: Leave empty
-     - **Install Command**: `npm install && cd server && npm install && cd ../client && npm install`
-     - **Build Command**: `cd client && npm run build`
-     - **Output Directory**: `client/build`
+   - Authorize Railway access
 
-3. **Set Environment Variables**
-   In Vercel dashboard, go to Settings → Environment Variables:
-   ```
-   DB_HOST=your-supabase-host.supabase.co
-   DB_PORT=5432
-   DB_NAME=postgres
-   DB_USER=postgres
-   DB_PASSWORD=your-supabase-password
-   JWT_SECRET=your-super-secret-jwt-key
-   NODE_ENV=production
-   FRONTEND_URL=https://your-blog.vercel.app
-   ```
+2. **Deploy Your Project**
+   - Click "New Project"
+   - Select "Deploy from GitHub repo"
+   - Choose your Personal_blog repository
+   - Click "Deploy Now"
 
-4. **Deploy**
-   - Click "Deploy"
-   - Wait for deployment to complete
-   - Your blog will be live at `https://your-blog.vercel.app`
+3. **Add PostgreSQL Database**
+   - In project dashboard, click "+ New"
+   - Select "Database" → "PostgreSQL"
+   - Railway creates the database automatically
 
-### Step 3: Create Admin User
+### Step 2: Configure Environment Variables
 
-1. **Access your deployed API**
-   - Go to `https://your-blog.vercel.app/api/health`
+In Railway dashboard → Variables tab, add:
+```
+NODE_ENV=production
+PORT=5000
+DB_HOST=your-railway-db-host
+DB_PORT=5432
+DB_NAME=railway
+DB_USER=postgres
+DB_PASSWORD=your-railway-db-password
+JWT_SECRET=your-super-secret-jwt-key
+FRONTEND_URL=https://your-app.railway.app
+```
+
+### Step 3: Initialize Database
+
+1. **Go to PostgreSQL database** in Railway
+2. **Click "Query" tab**
+3. **Copy SQL from `server/scripts/init-db.sql`**
+4. **Paste and run** the initialization script
+
+### Step 4: Create Admin User
+
+1. **Test your API**
+   - Visit `https://your-app.railway.app/api/health`
    - Should return `{"status":"OK"}`
 
 2. **Create admin user via API**
    ```bash
-   curl -X POST https://your-blog.vercel.app/api/auth/register \
+   curl -X POST https://your-app.railway.app/api/auth/register \
      -H "Content-Type: application/json" \
      -d '{"username":"admin","email":"admin@example.com","password":"admin123"}'
    ```
 
-3. **Login and start blogging!**
-   - Go to your blog URL
+3. **Start blogging!**
+   - Visit your Railway URL
    - Login with admin credentials
    - Create your first post
 
 ## 🎯 Deployment Checklist
 
-- [ ] Supabase project created
-- [ ] Database tables initialized
-- [ ] Code pushed to GitHub
-- [ ] Vercel project connected
+- [ ] Railway account created
+- [ ] Project deployed from GitHub
+- [ ] PostgreSQL database added
 - [ ] Environment variables set
-- [ ] Deployment successful
+- [ ] Database tables initialized
 - [ ] Admin user created
 - [ ] Blog is live and working!
 
 ## 💰 Cost Breakdown
 
-- **Vercel**: Free (personal projects)
-- **Supabase**: Free (500MB database, 2GB bandwidth)
-- **Total**: $0/month
+- **Railway**: $5/month (includes database)
+- **Total**: $5/month
 
 ## 🔧 Troubleshooting
 
 ### Common Issues:
 
 1. **Database Connection Failed**
-   - Check Supabase credentials
-   - Verify environment variables in Vercel
+   - Check Railway database credentials
+   - Verify environment variables
 
 2. **CORS Errors**
-   - Update `FRONTEND_URL` in Vercel environment variables
+   - Update `FRONTEND_URL` in Railway environment variables
    - Check CORS configuration in `server/index.js`
 
 3. **Build Failures**
-   - Check build logs in Vercel dashboard
+   - Check Railway build logs
    - Verify all dependencies are in `package.json`
 
 ### Support:
-- Vercel Documentation: https://vercel.com/docs
-- Supabase Documentation: https://supabase.com/docs
+- Railway Documentation: https://docs.railway.app
+- Railway Discord: https://discord.gg/railway
