@@ -2,8 +2,9 @@
 const getApiUrl = () => {
     // Check if we're in production
     if (process.env.NODE_ENV === 'production') {
-      // Use environment variable or default to production API
-      return process.env.REACT_APP_API_URL || 'https://api.yourdomain.com';
+      // In production, use same domain (Express serves both API and static files)
+      // Empty string means relative URLs like '/api/posts'
+      return process.env.REACT_APP_API_URL || '';
     }
     
     // Development: use proxy configured in package.json
