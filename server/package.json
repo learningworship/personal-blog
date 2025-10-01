@@ -6,20 +6,27 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "prod": "cross-env NODE_ENV=production node index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "pg": "^8.11.3",
-    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.1.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.2",
-    "express-validator": "^7.0.1"
+    "pg": "^8.11.3",
+    "winston": "^3.18.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2",
-    "eslint": "^8.55.0"
+    "cross-env": "^10.1.0",
+    "eslint": "^8.55.0",
+    "nodemon": "^3.0.2"
   }
 }

@@ -1,5 +1,13 @@
 // PostgreSQL database configuration
-  const { Pool } = require('pg');
+const { Pool } = require('pg');
+const logger = require('../utils/logger');
+
+  // SSL configuration: Use DB_SSL env variable for fine control
+  // Set DB_SSL=true in production when your database requires SSL
+  let sslConfig = false;
+  if (process.env.DB_SSL === 'true') {
+    sslConfig = { rejectUnauthorized: false };
+  }
 
   const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
@@ -7,7 +15,7 @@
     database: process.env.DB_NAME || 'blog_db',
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    ssl: sslConfig,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
@@ -17,7 +25,7 @@
   const connect = async () => {
     try {
       const client = await pool.connect();
-      console.log('Connected to PostgreSQL database');
+      logger.info('Connected to PostgreSQL database');
       
       // Initialize database tables
       await initializeTables(client);
@@ -25,7 +33,7 @@
       client.release();
       return true;
     } catch (err) {
-      console.error('Database connection error:', err);
+      logger.error('Database connection error:', err);
       throw err;
     }
   };
@@ -67,26 +75,35 @@
         CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);
       `);
 
-      console.log('Database tables initialized successfully');
+      logger.info('Database tables initialized successfully');
     } catch (err) {
-      console.error('Error initializing database tables:', err);
+      logger.error('Error initializing database tables:', err);
       throw err;
     }
   };
 
-  // Query helper function
-  const query = async (text, params) => {
-    const start = Date.now();
-    try {
-      const res = await pool.query(text, params);
-      const duration = Date.now() - start;
-      console.log('Executed query', { text, duration, rows: res.rowCount });
-      return res;
-    } catch (err) {
-      console.error('Database query error:', err);
-      throw err;
+// Query helper function
+const query = async (text, params) => {
+  const start = Date.now();
+  try {
+    const res = await pool.query(text, params);
+    const duration = Date.now() - start;
+    
+    // Only log in development or if duration is high
+    if (process.env.NODE_ENV !== 'production' || duration > 1000) {
+      logger.debug('Executed query', { 
+        text: text.substring(0, 100), // Only log first 100 chars
+        duration, 
+        rows: res.rowCount 
+      });
     }
-  };
+    
+    return res;
+  } catch (err) {
+    logger.error('Database query error:', { error: err.message, query: text });
+    throw err;
+  }
+};
 
 module.exports = {
   pool,
