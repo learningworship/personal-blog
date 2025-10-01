@@ -36,7 +36,7 @@ INSERT INTO users (username, email, password_hash, role)
 VALUES (
     'admin', 
     'admin@example.com', 
-    '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J/8.8.8.8', 
+    '$2a$12$3NCr4hCPza5QHxjJp/dKyOkjyaQKI5TnMj9mMtY/EN4nXGX2c/pbi', 
     'admin'
 ) ON CONFLICT (username) DO NOTHING;
 
@@ -165,6 +165,6 @@ CREATE TRIGGER update_posts_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
--- Grant permissions
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO blog_user;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO blog_user;
+-- Grant permissions (commented out for Supabase - permissions are managed by Supabase)
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO blog_user;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO blog_user;

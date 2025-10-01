@@ -107,3 +107,118 @@ The application will be available at:
 - `DELETE /api/posts/:id` - Delete post (requires authentication)
 - `POST /api/auth/login` - User login
 - `POST /api/auth/register` - User registration
+
+## 🚀 Production Deployment (Vercel + Supabase)
+
+### Step 1: Set Up Supabase Database
+
+1. **Create Supabase Account**
+   - Go to https://supabase.com
+   - Sign up for free account
+   - Create new project
+
+2. **Get Database Credentials**
+   - Go to Settings → Database
+   - Copy connection details:
+     - Host
+     - Port (5432)
+     - Database name (postgres)
+     - Username (postgres)
+     - Password
+
+3. **Set Up Database Tables**
+   - Go to SQL Editor in Supabase
+   - Run the initialization script from `server/scripts/init-db.sql`
+
+### Step 2: Deploy to Vercel
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Prepare for Vercel deployment"
+   git push origin main
+   ```
+
+2. **Connect to Vercel**
+   - Go to https://vercel.com
+   - Sign up with GitHub
+   - Import your repository
+   - Set build settings:
+     - **Framework Preset**: Other
+     - **Root Directory**: Leave empty
+     - **Install Command**: `npm install && cd server && npm install && cd ../client && npm install`
+     - **Build Command**: `cd client && npm run build`
+     - **Output Directory**: `client/build`
+
+3. **Set Environment Variables**
+   In Vercel dashboard, go to Settings → Environment Variables:
+   ```
+   DB_HOST=your-supabase-host.supabase.co
+   DB_PORT=5432
+   DB_NAME=postgres
+   DB_USER=postgres
+   DB_PASSWORD=your-supabase-password
+   JWT_SECRET=your-super-secret-jwt-key
+   NODE_ENV=production
+   FRONTEND_URL=https://your-blog.vercel.app
+   ```
+
+4. **Deploy**
+   - Click "Deploy"
+   - Wait for deployment to complete
+   - Your blog will be live at `https://your-blog.vercel.app`
+
+### Step 3: Create Admin User
+
+1. **Access your deployed API**
+   - Go to `https://your-blog.vercel.app/api/health`
+   - Should return `{"status":"OK"}`
+
+2. **Create admin user via API**
+   ```bash
+   curl -X POST https://your-blog.vercel.app/api/auth/register \
+     -H "Content-Type: application/json" \
+     -d '{"username":"admin","email":"admin@example.com","password":"admin123"}'
+   ```
+
+3. **Login and start blogging!**
+   - Go to your blog URL
+   - Login with admin credentials
+   - Create your first post
+
+## 🎯 Deployment Checklist
+
+- [ ] Supabase project created
+- [ ] Database tables initialized
+- [ ] Code pushed to GitHub
+- [ ] Vercel project connected
+- [ ] Environment variables set
+- [ ] Deployment successful
+- [ ] Admin user created
+- [ ] Blog is live and working!
+
+## 💰 Cost Breakdown
+
+- **Vercel**: Free (personal projects)
+- **Supabase**: Free (500MB database, 2GB bandwidth)
+- **Total**: $0/month
+
+## 🔧 Troubleshooting
+
+### Common Issues:
+
+1. **Database Connection Failed**
+   - Check Supabase credentials
+   - Verify environment variables in Vercel
+
+2. **CORS Errors**
+   - Update `FRONTEND_URL` in Vercel environment variables
+   - Check CORS configuration in `server/index.js`
+
+3. **Build Failures**
+   - Check build logs in Vercel dashboard
+   - Verify all dependencies are in `package.json`
+
+### Support:
+- Vercel Documentation: https://vercel.com/docs
+- Supabase Documentation: https://supabase.com/docs
