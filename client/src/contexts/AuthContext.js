@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { axiosConfig } from '../config/api';
+
+// Configure axios defaults
+axios.defaults.timeout = axiosConfig.timeout;
+if (axiosConfig.baseURL) {
+  axios.defaults.baseURL = axiosConfig.baseURL;
+}
 
 const AuthContext = createContext();
 
