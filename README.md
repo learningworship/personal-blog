@@ -93,10 +93,9 @@ The application will be available at:
 
 ## Security Notes
 
-- Change default JWT secret in production
 - Use strong passwords for database users
 - Never commit `.env` files to version control
-- Consider using environment-specific configurations for production
+- Keep your JWT secret secure
 
 ## API Endpoints
 
@@ -108,97 +107,10 @@ The application will be available at:
 - `POST /api/auth/login` - User login
 - `POST /api/auth/register` - User registration
 
-## 🚀 Production Deployment (Railway)
+## 🎯 Development Features
 
-### Step 1: Deploy to Railway
-
-1. **Create Railway Account**
-   - Go to https://railway.app
-   - Sign up with GitHub
-   - Authorize Railway access
-
-2. **Deploy Your Project**
-   - Click "New Project"
-   - Select "Deploy from GitHub repo"
-   - Choose your Personal_blog repository
-   - Click "Deploy Now"
-
-3. **Add PostgreSQL Database**
-   - In project dashboard, click "+ New"
-   - Select "Database" → "PostgreSQL"
-   - Railway creates the database automatically
-
-### Step 2: Configure Environment Variables
-
-In Railway dashboard → Variables tab, add:
-```
-NODE_ENV=production
-PORT=5000
-DB_HOST=your-railway-db-host
-DB_PORT=5432
-DB_NAME=railway
-DB_USER=postgres
-DB_PASSWORD=your-railway-db-password
-JWT_SECRET=your-super-secret-jwt-key
-FRONTEND_URL=https://your-app.railway.app
-```
-
-### Step 3: Initialize Database
-
-1. **Go to PostgreSQL database** in Railway
-2. **Click "Query" tab**
-3. **Copy SQL from `server/scripts/init-db.sql`**
-4. **Paste and run** the initialization script
-
-### Step 4: Create Admin User
-
-1. **Test your API**
-   - Visit `https://your-app.railway.app/api/health`
-   - Should return `{"status":"OK"}`
-
-2. **Create admin user via API**
-   ```bash
-   curl -X POST https://your-app.railway.app/api/auth/register \
-     -H "Content-Type: application/json" \
-     -d '{"username":"admin","email":"admin@example.com","password":"admin123"}'
-   ```
-
-3. **Start blogging!**
-   - Visit your Railway URL
-   - Login with admin credentials
-   - Create your first post
-
-## 🎯 Deployment Checklist
-
-- [ ] Railway account created
-- [ ] Project deployed from GitHub
-- [ ] PostgreSQL database added
-- [ ] Environment variables set
-- [ ] Database tables initialized
-- [ ] Admin user created
-- [ ] Blog is live and working!
-
-## 💰 Cost Breakdown
-
-- **Railway**: $5/month (includes database)
-- **Total**: $5/month
-
-## 🔧 Troubleshooting
-
-### Common Issues:
-
-1. **Database Connection Failed**
-   - Check Railway database credentials
-   - Verify environment variables
-
-2. **CORS Errors**
-   - Update `FRONTEND_URL` in Railway environment variables
-   - Check CORS configuration in `server/index.js`
-
-3. **Build Failures**
-   - Check Railway build logs
-   - Verify all dependencies are in `package.json`
-
-### Support:
-- Railway Documentation: https://docs.railway.app
-- Railway Discord: https://discord.gg/railway
+- **Local PostgreSQL database** with automatic table initialization
+- **Hot reload** for both frontend and backend
+- **ESLint** for code quality
+- **Bootstrap** for responsive design
+- **JWT authentication** with secure password hashing

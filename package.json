@@ -8,8 +8,7 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
-    "start": "cd server && npm start",
-    "railway-build": "node build-railway.js"
+    "start": "cd server && npm start"
   },
   "keywords": ["blog", "react", "nodejs", "postgresql"],
   "author": "",
