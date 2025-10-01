@@ -6,10 +6,10 @@
       "use": "@vercel/node"
     },
     {
-      "src": "client/package.json",
+      "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build"
+        "distDir": "client/build"
       }
     }
   ],
@@ -25,7 +25,5 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "installCommand": "npm install && cd server && npm install && cd ../client && npm install",
-  "buildCommand": "cd client && npm run build"
+  }
 }
